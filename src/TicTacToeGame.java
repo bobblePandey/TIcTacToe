@@ -40,8 +40,17 @@ public class TicTacToeGame {
         while ( gc.getGameStatus(boardGame) == GameState.IN_PROGRESS ) {
             System.out.println("This is " + gc.getCurrentPlayer(boardGame).getName() + "'s chance");
 
-            System.out.println("Enter your move");
-            gc.executeNextMove(boardGame);
+            System.out.println("So you want to undo last move (y/n)");
+
+            char undoMove = sc.next().charAt(0);
+
+            if( undoMove == 'y' || undoMove == 'Y') {
+                gc.undoMove(boardGame);
+            }
+            else {
+                System.out.println("Enter your move");
+                gc.executeNextMove(boardGame);
+            }
 
             gc.display(boardGame);
         }

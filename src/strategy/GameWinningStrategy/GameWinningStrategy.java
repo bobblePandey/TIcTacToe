@@ -5,6 +5,8 @@ import Models.Cell;
 
 public interface GameWinningStrategy {
 
-    boolean checkWinner(Board b, Cell c);
+    boolean checkWinner(Cell c);
+
+    void undoLastMove(Cell cell);
 
 }

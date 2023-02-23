@@ -32,6 +32,27 @@ public class Game {
 
     }
 
+    public void undoMove() {
+
+        if(mMoves.size() < 1) {
+            System.out.println("No moves done yet");
+            return;
+        }
+
+        currPlayerIndex--;
+        if(currPlayerIndex < 0 ) {
+            currPlayerIndex += mPlayers.size();
+        }
+
+        Move lastMove = mMoves.get( mMoves.size() - 1 );
+
+        mGameBoard.undoLastMove(lastMove.getCell());
+
+        gameStrategy.undoLastMove(lastMove.getCell());
+
+        mMoves.remove(lastMove);
+    }
+
     public void makeNextMove() {
 
         //get player whose next chance is
@@ -48,7 +69,7 @@ public class Game {
         //add current move to move list for undo.
         mMoves.add(m);
 
-        if( gameStrategy.checkWinner(mGameBoard, movedCell) ) {
+        if( gameStrategy.checkWinner(movedCell) ) {
             winner = currentPlayer;
             mCurrentState = GameState.ENDED;
         }

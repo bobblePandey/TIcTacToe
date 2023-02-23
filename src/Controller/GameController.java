@@ -23,7 +23,7 @@ public class GameController {
    }
 
    public void undoMove(Game game) {
-
+       game.undoMove();
    }
 
    public void display(Game game) {

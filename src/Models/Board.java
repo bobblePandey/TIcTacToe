@@ -32,6 +32,12 @@ public class Board {
         }
     }
 
+    public void undoLastMove(final Cell lastMovedCell) {
+
+        mBoard.get(lastMovedCell.getRow()).get(lastMovedCell.getCol()).setCellState(CellState.EMPTY);
+        mBoard.get(lastMovedCell.getRow()).get(lastMovedCell.getCol()).setPlayer(null);
+    }
+
     public List<List<Cell>> getBoard() {
         return mBoard;
     }

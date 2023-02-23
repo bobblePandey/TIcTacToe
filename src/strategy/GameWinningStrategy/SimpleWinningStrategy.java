@@ -14,6 +14,8 @@ public class SimpleWinningStrategy implements GameWinningStrategy{
     HashMap<Character, Integer> leftDiagonalCountMap;
     HashMap<Character, Integer> rightDiagonalCountMap;
 
+    int boardSize;
+
     public SimpleWinningStrategy(int dimension) {
 
         rowCountMap = new ArrayList<>();
@@ -24,10 +26,12 @@ public class SimpleWinningStrategy implements GameWinningStrategy{
         }
         leftDiagonalCountMap = new HashMap<>();
         rightDiagonalCountMap = new HashMap<>();
+
+        boardSize = dimension;
     }
 
     @Override
-    public boolean checkWinner(Board b, Cell c) {
+    public boolean checkWinner( Cell c) {
 
         Character currSym = c.getPlayer().getSymbol();
 
@@ -45,14 +49,14 @@ public class SimpleWinningStrategy implements GameWinningStrategy{
         colCountMap.get(col).put(currSym, currCount + 1);
 
         //check for player win after current move row wise and col wise
-        if( rowCountMap.get(row).get(currSym) == b.getBoard().size() || colCountMap.get(col).get(currSym) == b.getBoard().size() ) {
+        if( rowCountMap.get(row).get(currSym) == boardSize || colCountMap.get(col).get(currSym) == boardSize ) {
             return true;
         }
 
         //check for player win left diagonal
         if(row == col) {
             leftDiagonalCountMap.put(currSym, leftDiagonalCountMap.getOrDefault(currSym, 0) + 1);
-            if(leftDiagonalCountMap.get(currSym) == b.getBoard().size()) {
+            if(leftDiagonalCountMap.get(currSym) == boardSize) {
                 return true;
             }
         }
@@ -62,13 +66,36 @@ public class SimpleWinningStrategy implements GameWinningStrategy{
         //3 4 5
         //6 7 8
         //check for player win right diagonal
-        if(row + col == b.getBoard().size() - 1) {
+        if(row + col == boardSize - 1) {
             rightDiagonalCountMap.put(currSym, rightDiagonalCountMap.getOrDefault(currSym, 0) + 1);
-            if(rightDiagonalCountMap.get(currSym) == b.getBoard().size()) {
+            if(rightDiagonalCountMap.get(currSym) == boardSize) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public void undoLastMove(Cell cell) {
+
+        Character currSym = cell.getPlayer().getSymbol();
+
+        int row = cell.getRow();
+        int col = cell.getCol();
+
+        rowCountMap.get(row).put( currSym, rowCountMap.get(row).get(currSym) - 1);
+        colCountMap.get(col).put( currSym, colCountMap.get(col).get(currSym) - 1);
+
+        //undo for player left diagonal
+        if(row == col) {
+            leftDiagonalCountMap.put( currSym, leftDiagonalCountMap.get(currSym) - 1);
+        }
+
+        //undo for player right diagonal
+        if(row + col == boardSize - 1) {
+            rightDiagonalCountMap.put( currSym, rightDiagonalCountMap.get(currSym) - 1);
+        }
+
     }
 }
